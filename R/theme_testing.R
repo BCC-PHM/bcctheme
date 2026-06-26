@@ -85,3 +85,6 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   ggtitle("Test Plot",
           subtitle = "Testing new theme") +
   theme_minimal()
+
+# next look at footer with logo and source text
+# based on bbplot https://github.com/bbc/bbplot/blob/master/R/finalise_plot.R
