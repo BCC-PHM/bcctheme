@@ -70,11 +70,17 @@ theme_bcc <- function(base_family = "Verdana",
                                          face="bold", 
                                          size = 28,
                                          color = bcc_cols("black")),
-      # set plot subtitle elements
+      plot.title.position = "panel",
+      # set plot subtitle/caption elements
       plot.subtitle = ggplot2::element_text(family = base_family,
                                             face="italic",
                                             size = 22,
                                             color = bcc_cols("black")),
+      plot.caption = ggplot2::element_text(family = base_family,
+                                           face="italic",
+                                           size = 14,
+                                           color = bcc_cols("black")),
+      plot.caption.position = "panel",
       # legend format
       # legend.title = ggplot2::element_text(family = base_family,
       #                                      size = 20,
@@ -91,7 +97,12 @@ theme_bcc <- function(base_family = "Verdana",
       axis.text = ggplot2::element_text(family = base_family,
                                         size = 18,
                                         color = bcc_cols("black")),
-      axis.text.x = ggplot2::element_text(margin=ggplot2::margin(5, b = 10))
+      axis.text.x = ggplot2::element_text(margin=ggplot2::margin(5, b = 10)),
+      # facet strip format
+      strip.background = ggplot2::element_rect(fill="white"),
+      strip.text = ggplot2::element_text(family = base_family,
+                                         size  = 22,
+                                         color = bcc_cols("black"))
       )
 }
 
@@ -102,17 +113,19 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
        subtitle = "Testing new theme",
        caption = "Source") +
   theme_bcc(gridline_x = F,
-            gridline_y = T)
+            gridline_y = T,
+            legend_position = "top")
 
 ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point(size = 4) +
   scale_colour_bcc(discrete = T, palette = "multi", reverse = TRUE) +
   labs(title = "Test Plot",
        subtitle = "Testing new theme",
-       caption = "Source") +
+       caption = "Source: Iris dataset from ggplot2") +
   theme_bcc(gridline_x = F,
             gridline_y = T,
-            legend_position = "top")
+            legend_position = "top") +
+  facet_wrap(~Species)
 
 ggplot(iris, aes(Species, Sepal.Width, fill = Species)) +
   geom_col() +
@@ -127,35 +140,82 @@ ggplot(iris, aes(Species, Sepal.Width, fill = Species)) +
 # based on bbplot https://github.com/bbc/bbplot/blob/master/R/finalise_plot.R 
 # and https://www.markhw.com/blog/logos
 
-# create footer
-footer <- grid::grobTree(grid::rasterGrob(png::readPNG("data/logo.png"), x = 0.2))
+# create plot
+plot <- ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(discrete = T, palette = "multi", reverse = TRUE) +
+  labs(title = "Test Plot",
+       subtitle = "Testing new theme",
+       caption = "Source: Iris dataset from ggplot2") +
+  theme_bcc(gridline_x = F,
+            gridline_y = T,
+            legend_position = "top")
 
+# function to create a footer
 create_footer <- function (logo_image_path) {
   #Make the footer
-  footer <- grid::grobTree(grid::rasterGrob(png::readPNG(logo_image_path), x = 0.8))
+  footer <- grid::grobTree(grid::rasterGrob(png::readPNG(logo_image_path), x = 0.15))
   return(footer)
   
 }
 
 footer <- create_footer("data/logo.png")
 
-# create plot
-plot <- ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-  geom_point(size = 4) +
-  scale_colour_bcc(discrete = T, palette = "multi", reverse = TRUE) +
-  labs(title = "Test Plot",
-       subtitle = "Testing new theme") +
-  theme_bcc(gridline_x = F,
-            gridline_y = T,
-            legend_position = "right")
+# add footer to plot - bbplot way of doing it
+finalise_plot <- function(plot_name,
+                          save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
+                          width_pixels=640,
+                          height_pixels=450,
+                          logo_image_path) {
+  
+  footer <- create_footer(logo_image_path)
+  
+  plot_grid <- ggpubr::ggarrange(plot_name, footer,
+                                 ncol = 1, nrow = 2,
+                                 heights = c(1, 0.045/(height_pixels/450)))
+  # plot_grid <- ggpubr::ggarrange(plot_name, footer,
+  #                                ncol = 1, nrow = 2,
+  #                                heights = c(10, 1))
+  return(plot_grid)
+}
 
-# combine the two
-ggpubr::ggarrange(plot, footer,
-                  ncol = 1, nrow = 2,
-                  heights = c(1, 0.045/(200/450)))
+finalise_plot(plot,
+              save_filepath = "testplot8.png",
+              width_pixels = 640,
+              height_pixels = 450,
+              logo_image_path = "data/logo.png")
 
-gridExtra::grid.arrange(plot, footer,
-                        height = c(.93, .07))
+# logo is very small
+# try adding logo in a different way
+
+finalise_plot_patchwork <- function(plot_name,
+                          save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
+                          width_pixels=640,
+                          height_pixels=450,
+                          logo_image_path) {
+  
+  footer <- ggplot2::ggplot(mapping = aes(x=0:1, y=1)) +
+    ggplot2::theme_void() +
+    ggplot2::annotation_custom(l, xmin = 0, xmax = .1)
+  
+  plot_grid <- patchwork::wrap_plots(plot_name, footer,
+                                     ncol = 1,
+                                     nrow = 2,
+                                     heights = c(.9, .1))
+  # plot_grid <- ggpubr::ggarrange(plot_name, footer,
+  #                                ncol = 1, nrow = 2,
+  #                                heights = c(10, 1))
+  return(plot_grid)
+}
+
+
+finalise_plot_patchwork(plot,
+              save_filepath = "testplot8.png",
+              width_pixels = 640,
+              height_pixels = 450,
+              logo_image_path = "data/logo.png")
+
+
 
 # try out left align function from bbplot
 # aligns title and subtitle to left
@@ -170,7 +230,8 @@ plot <- ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point(size = 4) +
   scale_colour_bcc(discrete = T, palette = "multi", reverse = TRUE) +
   labs(title = "Test Plot",
-       subtitle = "Testing new theme") +
+       subtitle = "Testing new theme",
+       caption = "Source:") +
   theme_bcc(gridline_x = F,
             gridline_y = T,
             legend_position = "right")
@@ -189,29 +250,23 @@ save_plot <- function (plot_grid, width, height, save_filepath) {
                   plot=plot_grid, width=(width/72), height=(height/72),  bg="white")
 }
 
-# combine with finalise_plot from bbplot
-finalise_plot <- function(plot_name,
-                          save_filepath=file.path(Sys.getenv("TMPDIR"), "tmp-nc.png"),
-                          width_pixels=640,
-                          height_pixels=450,
-                          logo_image_path) {
-  
-  footer <- create_footer(logo_image_path)
-  
-  #Draw your left-aligned grid
-  plot_left_aligned <- left_align(plot_name, c("subtitle", "title", "caption"))
-  plot_grid <- ggpubr::ggarrange(plot_left_aligned, footer,
-                                 ncol = 1, nrow = 2,
-                                 heights = c(1, 0.045/(height_pixels/450)))
-  ## print(paste("Saving to", save_filepath))
-  save_plot(plot_grid, width_pixels, height_pixels, save_filepath)
-  ## Return (invisibly) a copy of the graph. Can be assigned to a
-  ## variable or silently ignored.
-  invisible(plot_grid)
-}
 
-finalise_plot(plot,
-              save_filepath = "testplot3.png",
-              width_pixels = 640,
-              height_pixels = 450,
-              logo_image_path = "data/logo.png")
+
+
+
+
+# different way of adding logo
+footer <- ggplot(mapping = aes(x=0:1, y=1)) +
+  theme_void() +
+  annotation_custom(l, xmin = 0, xmax = .1)
+
+gridExtra::grid.arrange(plot, footer, heights = c(.93, .07))
+
+library(patchwork)
+plot / footer +
+  plot_layout(heights = c(10, 2))
+
+patchwork::wrap_plots(plot, footer,
+                      ncol = 1,
+                      nrow = 2,
+                      heights = c(10, 1))
