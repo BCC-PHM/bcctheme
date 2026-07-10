@@ -23,12 +23,18 @@ bcc_palettes <- list(`purple` = c(bcc_cols("purple"), "#F1E8F3"),
 #' Extract BCC colors as hex codes
 #'
 #' @param ... character Names of bcc_colours. If empty the full list of colours is returned.
+#'
 #' @returns A vector of hex codes for the specified colour names.
+#'
+#' @export
+#'
 #' @examples
+#' \dontrun{
 #' bcc_cols()
 #' bcc_cols("pink", "white")
 #' bcc_cols("yellow", "green", "blue")
-#' @export
+#' }
+#'
 bcc_cols <- function(...) {
   cols <- c(...)
 
@@ -43,11 +49,17 @@ bcc_cols <- function(...) {
 #' @param palette string Name of palette in bcc_palettes. Defaults to "purple".
 #' @param reverse boolean Should the palette should be reversed? Defaults to FALSE.
 #' @param ... Additional arguments to pass to colorRampPalette().
+#'
 #' @returns A function to interpolate the colours present in the palette.
+#'
+#' @export
+#'
 #' @examples
+#' \dontrun{
 #' bcc_pal("pink")(10)
 #' bcc_pal("multi")(25)
-#' @export
+#' }
+#'
 bcc_pal <- function(palette = "purple", reverse = FALSE, ...) {
   # get palette
   pal <- bcc_palettes[[palette]]
@@ -66,14 +78,21 @@ bcc_pal <- function(palette = "purple", reverse = FALSE, ...) {
 #' @param reverse boolean Should the palette should be reversed? Defaults to FALSE.
 #' @param ... Additional arguments passed to discrete_scale() or
 #'            scale_color_gradientn(), used respectively when discrete is TRUE or FALSE
+#'
 #' @returns A colour scale function for ggplot2.
+#'
+#' @export
+#'
 #' @examples
+#' \dontrun{
+#' library(ggplot2)
 #' iris <- data(iris)
 #'
 #' p <- ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
 #' geom_point(size = 4)
 #' p + scale_colour_bcc(discrete = FALSE, palette = "orange", reverse = TRUE, guide = "none")
-#' @export
+#' }
+#'
 scale_colour_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALSE, ...) {
   pal <- bcc_pal(palette = palette, reverse = reverse)
 
@@ -86,19 +105,26 @@ scale_colour_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALS
 
 #' Fill scale constructor for BCC colours
 #'
-#'@param palette string Name of palette in bcc_palettes
+#' @param palette string Name of palette in bcc_palettes
 #' @param discrete boolean Is the fill aesthetic discrete? Defaults to TRUE.
 #' @param reverse boolean Should the palette should be reversed? Defaults to FALSE.
 #' @param ... Additional arguments passed to discrete_scale() or
 #'            scale_fill_gradientn(), used respectively when discrete is TRUE or FALSE
+#'
 #' @returns A fill scale function for ggplot2.
+#'
+#' @export
+#'
 #' @examples
+#' \dontrun{
+#' library(ggplot2)
 #' iris <- data(iris)
 #'
 #' p <- ggplot(iris, aes(Species, Sepal.Width, fill = Species)) +
 #' geom_col()
 #' p + scale_fill_bcc("multi", guide = "none")
-#' @export
+#' }
+#'
 scale_fill_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALSE, ...) {
   pal <- bcc_pal(palette = palette, reverse = reverse)
 

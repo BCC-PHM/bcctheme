@@ -21,43 +21,43 @@ theme_bcc <- function(base_family = "Verdana",
                       gridline_x = T,
                       gridline_y = T,
                       legend_position = c("top", "right", "bottom", "left")) {
-  
+
   gridline_major <- ggplot2::element_line(
     linetype = "solid",
     linewidth = 0.15,
     color = "#999999"
   )
-  
+
   gridline_minor <- ggplot2::element_line(
     linetype = "dashed",
     linewidth = 0.15,
     color = "#999999"
   )
-  
+
   gridline_x_major <- if (isTRUE(gridline_x)) {
     gridline_major
   } else {
     ggplot2::element_blank()
   }
-  
+
   gridline_y_major <- if (isTRUE(gridline_y)) {
     gridline_major
   } else {
     ggplot2::element_blank()
   }
-  
+
   gridline_x_minor <- if (isTRUE(gridline_x)) {
     gridline_minor
   } else {
     ggplot2::element_blank()
   }
-  
+
   gridline_y_minor <- if (isTRUE(gridline_y)) {
     gridline_minor
   } else {
     ggplot2::element_blank()
   }
-  
+
   ggplot2::theme_classic(base_family = base_family) +
     ggplot2::theme(
       panel.background = ggplot2::element_blank(),
@@ -67,7 +67,7 @@ theme_bcc <- function(base_family = "Verdana",
       panel.grid.minor.y = gridline_y_minor,
       # set plot title elements
       plot.title = ggplot2::element_text(family = base_family,
-                                         face="bold", 
+                                         face="bold",
                                          size = 28,
                                          color = bcc_cols("black")),
       plot.title.position = "panel",
@@ -138,7 +138,7 @@ ggplot(iris, aes(Species, Sepal.Width, fill = Species)) +
 
 
 # next look at footer with logo and source text
-# based on bbplot https://github.com/bbc/bbplot/blob/master/R/finalise_plot.R 
+# based on bbplot https://github.com/bbc/bbplot/blob/master/R/finalise_plot.R
 # and https://www.markhw.com/blog/logos
 
 # create plot
@@ -157,7 +157,7 @@ create_footer <- function (logo_image_path) {
   #Make the footer
   footer <- grid::grobTree(grid::rasterGrob(png::readPNG(logo_image_path), x = 0.15))
   return(footer)
-  
+
 }
 
 footer <- create_footer("data/logo.png")
@@ -168,9 +168,9 @@ finalise_plot <- function(plot_name,
                           width_pixels=640,
                           height_pixels=450,
                           logo_image_path) {
-  
+
   footer <- create_footer(logo_image_path)
-  
+
   plot_grid <- ggpubr::ggarrange(plot_name, footer,
                                  ncol = 1, nrow = 2,
                                  heights = c(1, 0.045/(height_pixels/450)))
@@ -194,11 +194,11 @@ finalise_plot_patchwork <- function(plot_name,
                           width_pixels=640,
                           height_pixels=450,
                           logo_image_path) {
-  
+
   footer <- ggplot2::ggplot(mapping = aes(x=0:1, y=1)) +
     ggplot2::theme_void() +
     ggplot2::annotation_custom(l, xmin = 0, xmax = .1)
-  
+
   plot_grid <- patchwork::wrap_plots(plot_name, footer,
                                      ncol = 1,
                                      nrow = 2,
