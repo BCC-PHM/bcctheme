@@ -55,7 +55,7 @@ bcc_pal <- function(palette = "purple", reverse = FALSE, ...) {
   colorRampPalette(pal, ...)
 }
 
-bcc_pal("multi")(10)
+bcc_pal("purple")(10)
 
 #' Color scale constructor for bcc colors
 #'
