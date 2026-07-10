@@ -11,14 +11,14 @@ bcc_colours <- c(`purple` = "#84329B",
 
 #' Function to extract BCC colors as hex codes
 #'
-#' @param ... Character names of bcc_colours 
+#' @param ... Character names of bcc_colours
 #'
 bcc_cols <- function(...) {
   cols <- c(...)
-  
+
   if (is.null(cols))
     return (bcc_colours)
-  
+
   bcc_colours[cols]
 }
 
@@ -47,10 +47,10 @@ bcc_palettes <- list(`purple` = c(bcc_cols("purple"), "#F1E8F3"),
 bcc_pal <- function(palette = "purple", reverse = FALSE, ...) {
   # get palette
   pal <- bcc_palettes[[palette]]
-  
+
   # reverse if reverse = true
   if (reverse) pal <- rev(pal)
-  
+
   # interpolate between colours
   colorRampPalette(pal, ...)
 }
@@ -67,7 +67,7 @@ bcc_pal("purple")(10)
 #'
 scale_colour_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALSE, ...) {
   pal <- bcc_pal(palette = palette, reverse = reverse)
-  
+
   if (discrete) {
     discrete_scale("colour",  palette = pal, ...)
   } else {
@@ -85,7 +85,7 @@ scale_colour_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALS
 #'
 scale_fill_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALSE, ...) {
   pal <- bcc_pal(palette = palette, reverse = reverse)
-  
+
   if (discrete) {
     discrete_scale("fill", palette = pal, ...)
   } else {
@@ -96,15 +96,16 @@ scale_fill_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALSE,
 # scatter plot, discrete
 ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point(size = 4) +
-  scale_colour_bcc("green")
+  scale_colour_bcc("multi",
+                   guide = "none")
 
 # scatter plot, continuous
 ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
   geom_point(size = 4) +
-  scale_colour_bcc(discrete = FALSE, palette = "orange", reverse = TRUE) +
+  scale_colour_bcc(discrete = FALSE, palette = "orange", reverse = TRUE, guide = "none") +
   theme_minimal()
 
 ggplot(iris, aes(Species, Sepal.Width, fill = Species)) +
   geom_col() +
-  scale_fill_bcc("orange")
+  scale_fill_bcc("multi", guide = "none")
 
