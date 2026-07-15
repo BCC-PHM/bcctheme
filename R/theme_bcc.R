@@ -5,7 +5,7 @@
 #' @param base_family The font to use in this theme. Defaults to "Verdana"
 #' @param gridline_x Should horizontal gridlines be applied? Defaults to TRUE
 #' @param gridline_y Should vertical gridlines be applied? Defaults to TRUE
-#' @param legend_position Position of legend in plot. One of "none", "top", "right", "bottom", "left" or "inside"
+#' @param legend_position Position of legend in plot. One of "none", "top", "right", "bottom", "left" or "inside" - defaults to "right"
 #'
 #' @export
 #'
@@ -14,7 +14,7 @@
 theme_bcc <- function(base_family = "Verdana",
                       gridline_x = T,
                       gridline_y = T,
-                      legend_position = c("none", "top", "right", "bottom", "left", "inside")) {
+                      legend_position = "right") {
 
   gridline_major <- ggplot2::element_line(
     linetype = "solid",

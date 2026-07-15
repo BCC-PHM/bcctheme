@@ -8,7 +8,7 @@ theme_bcc(
   base_family = "Verdana",
   gridline_x = T,
   gridline_y = T,
-  legend_position = c("none", "top", "right", "bottom", "left", "inside")
+  legend_position = "right"
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ theme_bcc(
 
 \item{gridline_y}{Should vertical gridlines be applied? Defaults to TRUE}
 
-\item{legend_position}{Position of legend in plot. One of "none", "top", "right", "bottom", "left" or "inside"}
+\item{legend_position}{Position of legend in plot. One of "none", "top", "right", "bottom", "left" or "inside" - defaults to "right"}
 }
 \description{
 Creates a base theme for ggplot objects.
