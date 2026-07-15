@@ -8,18 +8,6 @@ bcc_colours <- c(`purple` = "#84329B",
                  `black`  = "#3c3c3b",
                  `white`  = "#FFFFFF")
 
-# list of BCC palettes
-bcc_palettes <- list(`purple` = c(bcc_cols("purple"), "#F1E8F3"),
-                     `pink` = c(bcc_cols("pink"), "#FCF1F7"),
-                     `orange` = c(bcc_cols("orange"), "#FBECE7"),
-                     `yellow` = c(bcc_cols("yellow"), "#FFF5E2"),
-                     `green` = c(bcc_cols("green"), "#EFF7E6"),
-                     `blue` = c(bcc_cols("blue"), "#E2F5FB"),
-                     `black` = c(bcc_cols("black"), "#E9E9E9"),
-                     `multi` = bcc_cols("purple", "pink", "orange", "yellow", "green", "blue"),
-                     `warm` = bcc_cols("purple", "pink", "orange", "yellow"),
-                     `cool` = bcc_cols("green", "blue"))
-
 #' Extract BCC colors as hex codes
 #'
 #' @param ... character Names of bcc_colours. If empty the full list of colours is returned.
@@ -43,6 +31,18 @@ bcc_cols <- function(...) {
 
   bcc_colours[cols]
 }
+
+# list of BCC palettes
+bcc_palettes <- list(`purple` = c(bcc_cols("purple"), "#F1E8F3"),
+                     `pink` = c(bcc_cols("pink"), "#FCF1F7"),
+                     `orange` = c(bcc_cols("orange"), "#FBECE7"),
+                     `yellow` = c(bcc_cols("yellow"), "#FFF5E2"),
+                     `green` = c(bcc_cols("green"), "#EFF7E6"),
+                     `blue` = c(bcc_cols("blue"), "#E2F5FB"),
+                     `black` = c(bcc_cols("black"), "#E9E9E9"),
+                     `multi` = bcc_cols("purple", "pink", "orange", "yellow", "green", "blue"),
+                     `warm` = bcc_cols("purple", "pink", "orange", "yellow"),
+                     `cool` = bcc_cols("green", "blue"))
 
 #' Interpolate a BCC colour palette
 #'
@@ -68,7 +68,7 @@ bcc_pal <- function(palette = "purple", reverse = FALSE, ...) {
   if (reverse) pal <- rev(pal)
 
   # interpolate between colours
-  colorRampPalette(pal, ...)
+  grDevices::colorRampPalette(pal, ...)
 }
 
 #' Color scale constructor for BCC colours
@@ -97,9 +97,9 @@ scale_colour_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALS
   pal <- bcc_pal(palette = palette, reverse = reverse)
 
   if (discrete) {
-    discrete_scale("colour",  palette = pal, ...)
+    ggplot2::discrete_scale("colour",  palette = pal, ...)
   } else {
-    scale_color_gradientn(colours = pal(256), ...)
+    ggplot2::scale_color_gradientn(colours = pal(256), ...)
   }
 }
 
@@ -129,8 +129,8 @@ scale_fill_bcc <- function(palette = "purple", discrete = TRUE, reverse = FALSE,
   pal <- bcc_pal(palette = palette, reverse = reverse)
 
   if (discrete) {
-    discrete_scale("fill", palette = pal, ...)
+    ggplot2::discrete_scale("fill", palette = pal, ...)
   } else {
-    scale_fill_gradientn(colours = pal(256), ...)
+    ggplot2::scale_fill_gradientn(colours = pal(256), ...)
   }
 }
