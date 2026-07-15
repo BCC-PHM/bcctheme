@@ -14,5 +14,12 @@ Imports:
     ggplot2,
     showtext,
     sysfonts,
-    grDevices
+    grDevices,
+    dplyr,
+    forcats,
+    tibble
 URL: https://github.com/BCC-PHM/bcctheme
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
