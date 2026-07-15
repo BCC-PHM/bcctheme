@@ -187,7 +187,7 @@ ggplot(data = iris,
 
 You can also specify where you would like the legend to appear using `legend_position`:
 
-```{r bcc_theme_ex2}
+```{r bcc_theme_ex3}
 ggplot(data = iris,
        aes(x = Sepal.Width,
            y = Sepal.Length,
