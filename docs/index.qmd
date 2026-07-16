@@ -247,11 +247,25 @@ ggplot(data = iris,
   theme_bcc(legend_position = "bottom")
 ```
 
+You can change the base size of text using `base_size`:
+
+```{r bcc_theme_ex4, warning=FALSE}
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           colour = Species)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(palette = "multi") +
+  labs(title = "Sepal length by sepal width",
+       subtitle = "By species of iris") +
+  theme_bcc(base_size = 12)
+```
+
 Finally, you can tweak the theme further using the `theme()` function, which is part of the `ggplot2` package. The `theme()` function takes a large number of arguments to modify the theme in almost any way imaginable. 
 
 For example, `theme_bcc` removes the legend title by default. If you wish your legend to have a title, you can modify the theme:
 
-```{r bcc_theme_ex4, warning=FALSE}
+```{r bcc_theme_ex5, warning=FALSE}
 ggplot(data = iris,
        aes(x = Sepal.Width,
            y = Sepal.Length,
