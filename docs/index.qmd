@@ -1,0 +1,267 @@
+---
+title: "bcctheme"
+author: "Evelyn Baileeves"
+format: 
+  html:
+    grid:
+      body-width: 1000px
+    embed-resources: true
+    output-file: index.html
+toc: true
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE,
+  fig.width = 8,
+  fig.height = 5
+)
+```
+
+```{r setup, include = FALSE}
+library(bcctheme)
+library(ggplot2)
+library(dplyr)
+library(tibble)
+library(forcats)
+
+data <- data(iris)
+```
+
+The bcctheme package allows you to:
+
+- return colours used in Birmingham City Council's brand guidelines
+- use these colours in ggplot2 plots
+- apply a custom BCC theme to ggplot2 plots
+
+This vignette will explain how to use the functions provided by the package.
+
+# Colours
+
+## Get started
+
+The package can be installed from GitHub using devtools:
+
+```{r install, eval=FALSE, warning=FALSE}
+# install.packages("devtools")
+devtools::install_github("BCC-PHM/bcctheme")
+```
+
+Don't forget to load the package with `library()`!
+
+```{r load}
+library(bcctheme)
+```
+
+## List available colours
+
+To view the colours in the Birmingham City Council colour palette as a named vector of hex-encoded RGB values, run:
+
+```{r show_all_colours}
+bcc_cols()
+```
+
+You can also use the function to only return hex codes of colours of interest, by providing the colour names as strings. 
+
+```{r show_specific_colours}
+bcc_cols("purple", "pink", "yellow")
+```
+
+Note that depending on how your RStudio is set up, the colour name strings may highlight in colour. These colours do not correspond with the BCC brand colours. The actual colours which correspond with each name/hex code are shown below:
+
+```{r show_colours, echo = FALSE}
+# note, this is not the recommended way to use the colours in a ggplot, this is
+# just to display the available colours
+colours <- bcc_cols()
+
+tibble(name = names(colours) %>%
+         fct_inorder() %>%
+         fct_rev()) %>%
+  ggplot(aes(name, fill = name)) +
+  geom_bar(col = "black") +
+  scale_fill_manual(values = colours) +
+  coord_flip() +
+  theme_void() +
+  theme(legend.position = "none",
+        axis.text.y = element_text())
+```
+
+You could use this function to build custom palettes and apply it to a plot. For example:
+
+```{r custom_palette_example}
+my_pal <- bcc_cols("purple", "green", "yellow") # add colours to a vector
+my_pal <- unname(my_pal) # remove the colour names and just leave the hex codes
+
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           colour = Species)) +
+  geom_point(size = 4) +
+  scale_colour_manual(values = my_pal) # use scale_*_manual to add a custom colour palette
+```
+
+However, this is not the only way colours can be applied to a plot, as we will see.
+
+## Apply a colour palette to a ggplot2 object
+
+There are ten built-in colour palettes, all of which use the BCC brand colours. The available palettes are:
+
+- "purple" (purple, white)
+- "pink" (pink, white)
+- "orange" (orange, white)
+- "yellow" (yellow, white)
+- "green" (green, white)
+- "blue" (blue, white)
+- "black" (black, white)
+- "multi" (purple, pink, orange, yellow, green, blue)
+- "warm" (purple, pink, orange, yellow)
+- "cool" (green, blue)
+
+The easiest way to apply these colour palettes to a `ggplot2` object is to use the dedicated `scale_colour_bcc()` and `scale_fill_bcc()` functions. These functions will automatically create a gradient between colours if needed.
+
+```{r scale_colour_bcc_ex1}
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           colour = Species)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(palette = "multi")
+```
+
+You can reverse the order of the colour palette by using the `reverse` argument:
+```{r scale_fill_bcc_ex1}
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           fill = Species)) +
+  geom_col() +
+  scale_fill_bcc(palette = "green",
+                 reverse = TRUE)
+```
+
+By default, these functions assume your data is discrete. If you have continuous data, set `discrete` to `FALSE`.
+
+```{r scale_colour_bcc_ex2}
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           colour = Petal.Length)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(palette = "pink",
+                   reverse = TRUE,
+                   discrete = FALSE)
+```
+
+You can provide other arguments to `scale_colour_bcc()` and `scale_fill_bcc()`, which are passed on to the underlying functions which create the scale. For example, you can specify the name of the scale or where the breaks should be. 
+
+For further information, see the documentation for `ggplot2::discrete_scale()` (for discrete data) or `ggplot2::continuous_scale()` (for continuous data).
+
+```{r scale_colour_bcc_ex3}
+ggplot(data = iris,
+       aes(x = Petal.Width,
+           y = Petal.Length,
+           colour = Sepal.Width)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(palette = "cool",
+                   reverse = TRUE,
+                   discrete = FALSE,
+                   name = "Sepal Width",
+                   breaks = c(2,3,4))
+```
+
+## Interpolate a colour palette
+
+As stated, the easiest way to apply a colour palette is to use `scale_*_bcc()`. However, these functions only work when added to a `ggplot2` object.
+
+The `bcc_pal` helper function is provided for situations when you want to generate a gradient colour palette using a BCC palette which can be applied to other outputs, such as a map. It returns a function:
+
+```{r bcc_pal_ex1}
+bcc_pal(palette = "purple")
+```
+
+In order to get the palette, just tell it how many colours you need:
+
+```{r bcc_pal_ex2}
+bcc_pal(palette = "purple")(10)
+```
+
+Just like with the `scale_*_bcc()` functions, there is an option to reverse the order of the palette:
+
+```{r bcc_pal_ex3}
+bcc_pal(palette = "purple", reverse = TRUE)(10)
+```
+
+Note that in single colour palettes, the lightest colour in the palette is not white, which would be `#FFFFFF`. Instead, a very light hue of the main colour is provided, to ensure all colours are visible on a white background.
+
+# Theme
+
+## Apply the BCC theme
+
+As well as colour palettes, the package provides a ready-made BCC theme. When applied, it changes elements of the theme such as font, text size, axis lines and grid lines.
+
+In order to ensure the font changes, you will need to change the default graphics device in your RStudio environment. To do this, go to Tools > Global Options > General > Graphics and set "AGG" as the backend.
+
+To apply the theme to a plot, use `theme_bcc()`:
+
+```{r bcc_theme_ex1, warning=FALSE}
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           colour = Species)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(palette = "multi") +
+  labs(title = "Sepal length by sepal width",
+       subtitle = "By species of iris") +
+  theme_bcc()
+```
+
+The theme has limited built-in options to make small changes. For example, you can choose to remove the horizontal gridlines, or vertical gridlines, or both:
+
+```{r bcc_theme_ex2, warning=FALSE}
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           colour = Species)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(palette = "multi") +
+  labs(title = "Sepal length by sepal width",
+       subtitle = "By species of iris") +
+  theme_bcc(gridline_x = F, # remove vertical gridlines
+            gridline_y = F) # remove horizontal gridlines
+```
+
+You can also specify where you would like the legend to appear using `legend_position`:
+
+```{r bcc_theme_ex3, warning=FALSE}
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           colour = Species)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(palette = "multi") +
+  labs(title = "Sepal length by sepal width",
+       subtitle = "By species of iris") +
+  theme_bcc(legend_position = "bottom")
+```
+
+Finally, you can tweak the theme further using the `theme()` function, which is part of the `ggplot2` package. The `theme()` function takes a large number of arguments to modify the theme in almost any way imaginable. 
+
+For example, `theme_bcc` removes the legend title by default. If you wish your legend to have a title, you can modify the theme:
+
+```{r bcc_theme_ex4, warning=FALSE}
+ggplot(data = iris,
+       aes(x = Sepal.Width,
+           y = Sepal.Length,
+           colour = Species)) +
+  geom_point(size = 4) +
+  scale_colour_bcc(palette = "multi") +
+  labs(title = "Sepal length by sepal width",
+       subtitle = "By species of iris") +
+  theme_bcc() +
+  theme(legend.title = element_text(size = 22,
+                                    color = bcc_cols("black")))
+```
+
+However, make sure you call `theme()` after the `theme_bcc()` function. If you don't, `theme_bcc()` will override any changes made!

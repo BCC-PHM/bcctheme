@@ -6,7 +6,7 @@
 .DS_Store
 .quarto
 
-# Exclude the following directories 
+# Exclude the following directories
 /data/
 /output/
 
@@ -21,7 +21,7 @@
 # Exclude output formats
 *.doc
 *.docx
-*.html
+#*.html
 *.pdf
 *.ppt
 *.pptx
