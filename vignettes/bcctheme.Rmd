@@ -35,9 +35,7 @@ The bcctheme package allows you to:
 
 This vignette will explain how to use the functions provided by the package.
 
-# Colours
-
-## Get started
+# Get started
 
 The package can be installed from GitHub using devtools:
 
@@ -51,6 +49,8 @@ Don't forget to load the package with `library()`!
 ```{r load}
 library(bcctheme)
 ```
+
+# Colour palettes
 
 ## List available colours
 

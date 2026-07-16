@@ -3085,9 +3085,9 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#colours" id="toc-colours" class="nav-link active" data-scroll-target="#colours">Colours</a>
+  <li><a href="#get-started" id="toc-get-started" class="nav-link active" data-scroll-target="#get-started">Get started</a></li>
+  <li><a href="#colour-palettes" id="toc-colour-palettes" class="nav-link" data-scroll-target="#colour-palettes">Colour palettes</a>
   <ul class="collapse">
-  <li><a href="#get-started" id="toc-get-started" class="nav-link" data-scroll-target="#get-started">Get started</a></li>
   <li><a href="#list-available-colours" id="toc-list-available-colours" class="nav-link" data-scroll-target="#list-available-colours">List available colours</a></li>
   <li><a href="#apply-a-colour-palette-to-a-ggplot2-object" id="toc-apply-a-colour-palette-to-a-ggplot2-object" class="nav-link" data-scroll-target="#apply-a-colour-palette-to-a-ggplot2-object">Apply a colour palette to a ggplot2 object</a></li>
   <li><a href="#interpolate-a-colour-palette" id="toc-interpolate-a-colour-palette" class="nav-link" data-scroll-target="#interpolate-a-colour-palette">Interpolate a colour palette</a></li>
@@ -3133,10 +3133,8 @@ vertical-align: -.125em;
 <li>apply a custom BCC theme to ggplot2 plots</li>
 </ul>
 <p>This vignette will explain how to use the functions provided by the package.</p>
-<section id="colours" class="level1">
-<h1>Colours</h1>
-<section id="get-started" class="level2">
-<h2 class="anchored" data-anchor-id="get-started">Get started</h2>
+<section id="get-started" class="level1">
+<h1>Get started</h1>
 <p>The package can be installed from GitHub using devtools:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
@@ -3147,6 +3145,8 @@ vertical-align: -.125em;
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bcctheme)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="colour-palettes" class="level1">
+<h1>Colour palettes</h1>
 <section id="list-available-colours" class="level2">
 <h2 class="anchored" data-anchor-id="list-available-colours">List available colours</h2>
 <p>To view the colours in the Birmingham City Council colour palette as a named vector of hex-encoded RGB values, run:</p>
@@ -3293,8 +3293,8 @@ vertical-align: -.125em;
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         rgb(x[, 1L], x[, 2L], x[, 3L], x[, 4L], maxColorValue = 255)</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     else rgb(x[, 1L], x[, 2L], x[, 3L], maxColorValue = 255)</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; }</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;bytecode: 0x000002cbfc0867e8&gt;</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;environment: 0x000002cbfd60bdc8&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;bytecode: 0x000001ec57126468&gt;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;environment: 0x000001ec58667c80&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In order to get the palette, just tell it how many colours you need:</p>
 <div class="cell">
