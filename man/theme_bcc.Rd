@@ -6,6 +6,7 @@
 \usage{
 theme_bcc(
   base_family = "Verdana",
+  base_size = 16,
   gridline_x = T,
   gridline_y = T,
   legend_position = "right"
@@ -13,6 +14,8 @@ theme_bcc(
 }
 \arguments{
 \item{base_family}{The font to use in this theme. Defaults to "Verdana"}
+
+\item{base_size}{Base font size, in pts. Defaults to 16}
 
 \item{gridline_x}{Should horizontal gridlines be applied? Defaults to TRUE}
 
