@@ -11,5 +11,6 @@ The package can be installed from GitHub using devtools:
 devtools::install_github("BCC-PHM/bcctheme")
 ```
 
+## Usage
 
-This repository is dual licensed under the [Open Government v3]([https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) & MIT. All code can outputs are subject to Crown Copyright.
+Documentation for the package can be found [here]("https://bcc-phm.github.io/bcctheme/").
